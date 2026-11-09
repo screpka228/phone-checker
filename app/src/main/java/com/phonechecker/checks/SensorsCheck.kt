@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.OrientationEventListener
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -68,6 +69,12 @@ private enum class S(val title: String) {
     STEP("Шагомер"), IR("ИК-порт"), VIBRO("Вибромотор"), FINGER("Отпечаток"), KEYS("Кнопки громк./питания"),
 }
 
+/** Сообщения Samsung о магните чехла (разные версии One UI). */
+private val COVER_ACTIONS = listOf(
+    "com.samsung.cover.OPEN", "com.samsung.cover.STATE_CHANGED", "com.samsung.android.cover.STATE_CHANGED",
+    "com.samsung.flip.OPEN", "com.sec.android.cover.ATTACH_STATE_CHANGED",
+)
+
 private fun missing() = SRow(RowState.MISSING, "нет в телефоне")
 
 @Composable
@@ -81,6 +88,10 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
 
     // Холл: публичного типа нет, ищем датчик по имени (Samsung, Xiaomi и др.).
     val hall = remember { sm.getSensorList(Sensor.TYPE_ALL).firstOrNull { "hall" in it.name.lowercase() } }
+    // У Samsung Холл — не датчик, а устройство ввода «hall»; события приходят широковещательно от системы чехлов.
+    val hallInput = remember {
+        InputDevice.getDeviceIds().any { id -> InputDevice.getDevice(id)?.name?.lowercase()?.contains("hall") == true }
+    }
     val ir = remember { ctx.getSystemService(ConsumerIrManager::class.java)?.takeIf { it.hasIrEmitter() } }
     val vib = remember { ctx.getSystemService(Vibrator::class.java)?.takeIf { it.hasVibrator() } }
     val hasFinger = remember { pm.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT) }
@@ -99,7 +110,7 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
         init(S.BARO, sm.getDefaultSensor(Sensor.TYPE_PRESSURE) != null, "ждём данные")
         init(S.PROX, sm.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null, "поднесите руку", yellow = true)
         init(S.LIGHT, sm.getDefaultSensor(Sensor.TYPE_LIGHT) != null, "прикройте датчик")
-        init(S.HALL, hall != null, "поднесите магнит")
+        init(S.HALL, hall != null || hallInput, "поднесите магнит")
         init(S.STEP, sm.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null || sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null, "пройдитесь")
         init(S.IR, ir != null, "нажмите")
         init(S.VIBRO, vib != null, "нажмите")
@@ -172,12 +183,18 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
             override fun onReceive(c: Context, i: Intent) { key("⏻") }
         }
         ctx.registerReceiver(screenOff, IntentFilter(Intent.ACTION_SCREEN_OFF))
+        val cover = object : BroadcastReceiver() {
+            override fun onReceive(c: Context, i: Intent) { ok(S.HALL) }
+        }
+        val coverFilter = IntentFilter().apply { COVER_ACTIONS.forEach(::addAction) }
+        ContextCompat.registerReceiver(ctx, cover, coverFilter, ContextCompat.RECEIVER_EXPORTED)
 
         onDispose {
             sm.unregisterListener(listener)
             orient.disable()
             KeyBus.listener = null
             ctx.unregisterReceiver(screenOff)
+            ctx.unregisterReceiver(cover)
         }
     }
 

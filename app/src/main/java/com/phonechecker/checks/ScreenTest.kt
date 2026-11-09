@@ -1,6 +1,7 @@
 package com.phonechecker.checks
 
 import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -68,6 +69,11 @@ fun ScreenTest(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> Uni
     var phase by remember { mutableStateOf(Phase.COLORS) }
     var touch by remember { mutableStateOf<Status?>(null) }
 
+    var askExit by remember { mutableStateOf(false) }
+    // Системное «назад» во время заливок и тача не выкидывает молча: пройденное потеряется.
+    BackHandler(enabled = phase != Phase.VERDICT) { askExit = true }
+
+    Box(Modifier.fillMaxSize()) {
     when (phase) {
         Phase.COLORS -> Immersive { ColorPhase { phase = Phase.TOUCH } }
         Phase.TOUCH -> Immersive {
@@ -93,6 +99,29 @@ fun ScreenTest(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> Uni
                 )
             }
             SecondaryButton("Пройти тест заново") { phase = Phase.COLORS }
+        }
+    }
+    if (askExit) ExitDialog(
+        onExit = { askExit = false; onSkip() },
+        onDefect = { askExit = false; touch = Status.DEFECT; phase = Phase.VERDICT },
+        onStay = { askExit = false },
+    )
+    }
+}
+
+@Composable
+private fun ExitDialog(onExit: () -> Unit, onDefect: () -> Unit, onStay: () -> Unit) {
+    Box(Modifier.fillMaxSize().background(C.scrim), contentAlignment = Alignment.Center) {
+        Column(
+            Modifier.padding(20.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(C.card)
+                .border(1.dp, C.border, RoundedCornerShape(18.dp)).padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            T("Прервать тест экрана?", 20.sp, weight = FontWeight.Bold)
+            T("Пройденное не сохранится. Если нашли дефект — отметьте его.", 14.sp, C.text2, lineHeight = 20.sp)
+            PrimaryButton("Продолжить тест", onClick = onStay)
+            ToneButton("Отметить дефект", C.badAlt, Modifier.fillMaxWidth(), onDefect)
+            SecondaryButton("Выйти (пропустить)", onClick = onExit)
         }
     }
 }

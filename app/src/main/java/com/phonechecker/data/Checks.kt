@@ -1,6 +1,8 @@
 package com.phonechecker.data
 
 import android.content.Context
+import org.json.JSONArray
+import org.json.JSONObject
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -66,13 +68,50 @@ class AppState(context: Context) {
 
     val activeChecks: List<CheckId> get() = CheckId.entries.filter { isEnabled(it) }
 
-    val results = mutableStateMapOf<CheckId, CheckResult>()
+    // Результаты сохраняются на диск: Android может выгрузить приложение, пока пользователь в настройках.
+    val results = mutableStateMapOf<CheckId, CheckResult>().apply { putAll(loadResults()) }
 
     fun result(id: CheckId): CheckResult = results[id] ?: CheckResult(Status.NONE, id.hint)
 
-    fun set(id: CheckId, r: CheckResult) { results[id] = r }
+    fun set(id: CheckId, r: CheckResult) {
+        results[id] = r
+        saveResults()
+    }
 
-    fun skip(id: CheckId) { results[id] = CheckResult(Status.SKIPPED) }
+    fun skip(id: CheckId) = set(id, CheckResult(Status.SKIPPED))
+
+    fun resetResults() {
+        results.clear()
+        saveResults()
+    }
+
+    private fun saveResults() {
+        val json = JSONObject()
+        results.forEach { (id, r) ->
+            json.put(id.name, JSONObject().apply {
+                put("status", r.status.name)
+                put("badge", r.badge)
+                put("details", JSONArray().apply { r.details.forEach { (k, v) -> put(JSONArray().put(k).put(v)) } })
+                put("items", JSONArray().apply { r.items.forEach { put(JSONArray().put(it.name).put(it.status.name).put(it.value)) } })
+            })
+        }
+        prefs.edit().putString("results", json.toString()).apply()
+    }
+
+    private fun loadResults(): Map<CheckId, CheckResult> = runCatching {
+        val json = JSONObject(prefs.getString("results", null) ?: return emptyMap())
+        json.keys().asSequence().associate { key ->
+            val o = json.getJSONObject(key)
+            val d = o.getJSONArray("details")
+            val items = o.getJSONArray("items")
+            CheckId.valueOf(key) to CheckResult(
+                Status.valueOf(o.getString("status")),
+                o.getString("badge"),
+                (0 until d.length()).map { i -> d.getJSONArray(i).let { it.getString(0) to it.getString(1) } },
+                (0 until items.length()).map { i -> items.getJSONArray(i).let { a -> Item(a.getString(0), Status.valueOf(a.getString(1)), a.getString(2)) } },
+            )
+        }
+    }.getOrDefault(emptyMap())
 
     val doneCount: Int get() = activeChecks.count { results[it] != null }
 

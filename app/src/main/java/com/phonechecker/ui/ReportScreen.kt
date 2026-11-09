@@ -153,6 +153,10 @@ fun ReportScreen(state: AppState, back: () -> Unit) {
             if (stillAllowed) trySave(saved!!) else pick.launch(null)
         }
         if (state.reportTreeUri != null) SecondaryButton("Выбрать другую папку") { pick.launch(null) }
+        var confirm by remember { mutableStateOf(false) }
+        SecondaryButton(if (confirm) "Точно сбросить? Нажмите ещё раз" else "Новая проверка", if (confirm) C.bad.fg else C.text2) {
+            if (confirm) { state.resetResults(); back() } else confirm = true
+        }
     }) {
         Column(Modifier.padding(top = 8.dp)) {
             Cap("Итог", C.accent)
@@ -170,9 +174,10 @@ fun ReportScreen(state: AppState, back: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        Pip(C.pip(it.status))
+                        val absent = it.status == Status.INFO && it.value.startsWith("нет")
+                        Pip(if (absent) C.idleDot else C.pip(it.status))
                         T(it.name, 15.sp, modifier = Modifier.weight(1f))
-                        Badge(it.value.ifEmpty { it.status.label }, C.tone(it.status))
+                        Badge(it.value.ifEmpty { it.status.label }, if (absent) C.idle else C.tone(it.status))
                     }
                     if (i < g.rows.lastIndex) Box(Modifier.fillMaxWidth().height(1.dp).background(C.border))
                 }
