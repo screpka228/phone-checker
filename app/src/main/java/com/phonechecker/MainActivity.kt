@@ -1,6 +1,7 @@
 package com.phonechecker
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
@@ -21,6 +22,8 @@ import com.phonechecker.data.AppState
 import com.phonechecker.data.CheckId
 import com.phonechecker.data.CheckResult
 import com.phonechecker.checks.BatteryCheck
+import com.phonechecker.checks.ConnectCheck
+import com.phonechecker.checks.SensorsCheck
 import com.phonechecker.checks.MemoryCheck
 import com.phonechecker.checks.ScreenTest
 import com.phonechecker.checks.SystemCheck
@@ -32,7 +35,15 @@ import com.phonechecker.ui.Page
 import com.phonechecker.ui.PrimaryButton
 import com.phonechecker.ui.SecondaryButton
 
+/** Нажатия аппаратных кнопок для экрана датчиков. Вернул true — событие съедено. */
+object KeyBus {
+    var listener: ((KeyEvent) -> Boolean)? = null
+}
+
 class MainActivity : ComponentActivity() {
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        KeyBus.listener?.invoke(event) == true || super.dispatchKeyEvent(event)
+
     private val state by lazy { (application as App).state }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +96,8 @@ private fun CheckHost(id: CheckId, state: AppState, done: () -> Unit) {
         CheckId.SCREEN -> ScreenTest(index, finish, skip)
         CheckId.BATTERY -> BatteryCheck(index, finish, skip)
         CheckId.MEMORY -> MemoryCheck(index, finish, skip)
+        CheckId.SENSORS -> SensorsCheck(index, finish, skip)
+        CheckId.CONNECT -> ConnectCheck(index, finish, skip)
         CheckId.SYSTEM -> SystemCheck(finish, skip)
         else -> Page(bottom = {
             SecondaryButton("Пропустить", onClick = skip)
