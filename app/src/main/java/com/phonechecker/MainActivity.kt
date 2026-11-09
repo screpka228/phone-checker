@@ -20,7 +20,10 @@ import androidx.compose.ui.graphics.toArgb
 import com.phonechecker.data.AppState
 import com.phonechecker.data.CheckId
 import com.phonechecker.data.CheckResult
+import com.phonechecker.checks.BatteryCheck
+import com.phonechecker.checks.MemoryCheck
 import com.phonechecker.checks.ScreenTest
+import com.phonechecker.checks.SystemCheck
 import com.phonechecker.ui.AppTheme
 import com.phonechecker.ui.C
 import com.phonechecker.ui.ChecklistScreen
@@ -80,6 +83,9 @@ private fun CheckHost(id: CheckId, state: AppState, done: () -> Unit) {
     val index = if (id.extra) "Дополнительная проверка" else "Тест ${main.indexOf(id) + 1} из ${main.size}"
     when (id) {
         CheckId.SCREEN -> ScreenTest(index, finish, skip)
+        CheckId.BATTERY -> BatteryCheck(index, finish, skip)
+        CheckId.MEMORY -> MemoryCheck(index, finish, skip)
+        CheckId.SYSTEM -> SystemCheck(finish, skip)
         else -> Page(bottom = {
             SecondaryButton("Пропустить", onClick = skip)
         }) {
