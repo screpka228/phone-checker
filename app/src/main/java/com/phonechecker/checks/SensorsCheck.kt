@@ -90,7 +90,7 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
     // Начальное состояние строк.
     LaunchedEffect(Unit) {
         fun init(s: S, present: Boolean, hint: String, yellow: Boolean = false) {
-            rows[s] = if (present) Row(if (yellow) RowState.HINT else RowState.WAIT, hint) else missing()
+            rows[s] = if (present) SRow(if (yellow) RowState.HINT else RowState.WAIT, hint) else missing()
         }
         init(S.ACCEL, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null, "подвигайте телефон")
         init(S.GYRO, sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null, "покрутите телефон")
@@ -159,7 +159,7 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
         fun key(name: String) {
             pressed += name
             val all = pressed.size == 3
-            set(S.KEYS, Row(if (all) RowState.OK else RowState.WAIT, if (all) "все работают" else "нажато: ${pressed.joinToString(" ")}"))
+            set(S.KEYS, SRow(if (all) RowState.OK else RowState.WAIT, if (all) "все работают" else "нажато: ${pressed.joinToString(" ")}"))
         }
         KeyBus.listener = { ev ->
             when (ev.keyCode) {
@@ -197,7 +197,7 @@ fun SensorsCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
                     .onSuccess { rows[s] = SRow(RowState.OK, "сигнал отправлен") }
                     .onFailure { rows[s] = SRow(RowState.DEFECT, "ошибка передачи") }
             }
-            S.FINGER -> if (r.state != RowState.OK) startFingerprint(ctx, cancel) { st, text -> rows[s] = Row(st, text) }
+            S.FINGER -> if (r.state != RowState.OK) startFingerprint(ctx, cancel) { st, text -> rows[s] = SRow(st, text) }
             else -> when (r.state) {
                 // Тап по ждущей строке помечает датчик как неисправный, повторный — снимает отметку.
                 RowState.WAIT, RowState.HINT -> rows[s] = SRow(RowState.DEFECT, "не работает")
