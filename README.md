@@ -9,7 +9,7 @@
 [![Build APK](https://github.com/screpka228/phone-checker/actions/workflows/build.yml/badge.svg)](https://github.com/screpka228/phone-checker/actions/workflows/build.yml)
 ![minSdk](https://img.shields.io/badge/Android-8.0%2B-3ddc84)
 ![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7f52ff)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)
 
 </div>
 
@@ -110,4 +110,4 @@ Keystore **никогда не коммитится** — `*.jks` и `*.keystore
 
 ## Лицензия
 
-[MIT](LICENSE)
+[CC BY-NC 4.0](LICENSE) — можно использовать, копировать и менять с указанием автора, но **не в коммерческих целях**. Если берёте проект — пожалуйста, напишите автору (например, через issue).
