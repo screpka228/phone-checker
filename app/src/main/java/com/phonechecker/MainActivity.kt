@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import com.phonechecker.data.AppState
 import com.phonechecker.data.CheckId
+import com.phonechecker.data.CheckResult
+import com.phonechecker.checks.ScreenTest
 import com.phonechecker.ui.AppTheme
 import com.phonechecker.ui.C
 import com.phonechecker.ui.ChecklistScreen
@@ -73,7 +75,11 @@ private fun Root(state: AppState) {
 @Composable
 private fun CheckHost(id: CheckId, state: AppState, done: () -> Unit) {
     val skip = { state.skip(id); done() }
+    val finish = { r: CheckResult -> state.set(id, r); done() }
+    val main = state.activeChecks.filter { !it.extra }
+    val index = if (id.extra) "Дополнительная проверка" else "Тест ${main.indexOf(id) + 1} из ${main.size}"
     when (id) {
+        CheckId.SCREEN -> ScreenTest(index, finish, skip)
         else -> Page(bottom = {
             SecondaryButton("Пропустить", onClick = skip)
         }) {
