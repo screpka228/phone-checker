@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>A1.4: цвет и статус</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif}
+.tile{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:16px;border-radius:18px;background:#14171d;border:1px solid #22262e;min-height:110px}
+.ico{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pip{position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:#3c4043}
+.lbl{font-size:15px;color:#e8eaed;font-weight:600}
+.st{font-size:12px;color:#9aa0a6}
+</style>
+</helmet>
+<div style="width:390px;height:844px;position:relative;box-sizing:border-box;padding:28px 20px;display:flex;flex-direction:column;gap:16px;background:#0b0d11;color:#e8eaed">
+<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:flex-start">
+<div>
+<h1 style="margin:0;font-size:26px;font-weight:700"><button onClick="{{ openMenu }}" style="all:unset;cursor:pointer">Проверка</button></h1>
+<p style="margin:4px 0 0;font-size:13px;color:#9aa0a6">0 из 6 проверок</p>
+</div>
+<button style="width:44px;height:44px;border:0;border-radius:12px;background:#14171d;color:#e8eaed;font-size:16px">☀</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<div class="tile"><span class="pip"></span><span class="ico" style="background:#1e3a2a;color:#81c995"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><line x1="11" y1="18.5" x2="13" y2="18.5"/></svg></span><div><div class="lbl">Экран</div><div class="st">не проверено</div></div></div>
+<div class="tile"><span class="pip"></span><span class="ico" style="background:#3a3018;color:#fdd663"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="17" height="10" rx="2"/><line x1="22" y1="10.5" x2="22" y2="13.5"/><rect x="5" y="10" width="8" height="4" fill="currentColor" stroke="none"/></svg></span><div><div class="lbl">Батарея</div><div class="st">не проверено</div></div></div>
+<div class="tile"><span class="pip"></span><span class="ico" style="background:#1d2a3d;color:#8ab4f8"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><line x1="9" y1="2.5" x2="9" y2="5"/><line x1="15" y1="2.5" x2="15" y2="5"/><line x1="9" y1="19" x2="9" y2="21.5"/><line x1="15" y1="19" x2="15" y2="21.5"/></svg></span><div><div class="lbl">Память</div><div class="st">не проверено</div></div></div>
+<div class="tile"><span class="pip"></span><span class="ico" style="background:#2a1d3d;color:#c58af9"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.5 5.5a9 9 0 0 0 0 13M18.5 5.5a9 9 0 0 1 0 13"/></svg></span><div><div class="lbl">Датчики</div><div class="st">не проверено</div></div></div>
+<div class="tile"><span class="pip"></span><span class="ico" style="background:#1d3a3a;color:#78d9ec"><svg viewBox="0 0 24 24"><path d="M2.5 9.5a14 14 0 0 1 19 0M5.5 13a9.5 9.5 0 0 1 13 0M8.5 16.3a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor" stroke="none"/></svg></span><div><div class="lbl">Связь</div><div class="st">Wi-Fi, BT, GPS, NFC</div></div></div>
+<sc-if value="{{ on_cam }}" hint-placeholder-val="{{ false }}"><div class="tile"><span class="pip"></span><span class="ico" style="background:#22262e;color:#e8eaed"><svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.5"/><circle cx="12" cy="13.5" r="3.5"/></svg></span><div><div class="lbl">Камеры</div><div class="st">видео, зум, микрофон</div></div></div></sc-if><sc-if value="{{ on_chg }}" hint-placeholder-val="{{ false }}"><div class="tile"><span class="pip"></span><span class="ico" style="background:#3a3018;color:#fdd663"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><div><div class="lbl">Зарядка</div><div class="st">ток и мощность</div></div></div></sc-if><sc-if value="{{ on_str }}" hint-placeholder-val="{{ false }}"><div class="tile"><span class="pip"></span><span class="ico" style="background:#3a1d2a;color:#f28b82"><svg viewBox="0 0 24 24"><path d="M12 3v10"/><circle cx="12" cy="17" r="4"/></svg></span><div><div class="lbl">Стресс-тест</div><div class="st">нагрев за 2 мин</div></div></div></sc-if><sc-if value="{{ on_fake }}" hint-placeholder-val="{{ false }}"><div class="tile"><span class="pip"></span><span class="ico" style="background:#1d2a3d;color:#8ab4f8"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><div><div class="lbl">Подлинность</div><div class="st">модель vs железо</div></div></div></sc-if>
+
+<div class="tile"><span class="pip" style="background:#8ab4f8"></span><span class="ico" style="background:#22262e;color:#9aa0a6"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2" fill="#22262e"/><circle cx="15" cy="12" r="2" fill="#22262e"/><circle cx="8" cy="18" r="2" fill="#22262e"/></svg></span><div><div class="lbl">Система</div><div class="st">инфо</div></div></div>
+</div>
+<div style="flex:1"></div>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Сформировать отчёт</button>
+<sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:flex-end"><div style="background:#14171d;border-radius:24px 24px 0 0;padding:20px 22px 28px;border-top:1px solid #22262e"><div style="width:40px;height:4px;border-radius:999px;background:#3c4043;margin:0 auto 14px"></div><h2 style="margin:0;font-size:20px">Дополнительные проверки</h2><p style="margin:4px 0 8px;font-size:13px;color:#9aa0a6">Включённые появятся плитками в чеклисте</p>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #22262e"><div style="flex:1"><div style="font-size:16px">Камеры</div><div style="font-size:12px;color:#9aa0a6">для прошивок без штатной камеры</div></div><button onClick="{{ t_cam }}" aria-label="Камеры" style="width:50px;height:30px;border:0;border-radius:999px;padding:3px;background:{{ bg_cam }};display:flex;justify-content:{{ jc_cam }}"><span style="width:24px;height:24px;border-radius:50%;background:#fff"></span></button></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #22262e"><div style="flex:1"><div style="font-size:16px">Зарядка</div><div style="font-size:12px;color:#9aa0a6">ток в мА и мощность, видно плохой разъём</div></div><button onClick="{{ t_chg }}" aria-label="Зарядка" style="width:50px;height:30px;border:0;border-radius:999px;padding:3px;background:{{ bg_chg }};display:flex;justify-content:{{ jc_chg }}"><span style="width:24px;height:24px;border-radius:50%;background:#fff"></span></button></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #22262e"><div style="flex:1"><div style="font-size:16px">Стресс-тест</div><div style="font-size:12px;color:#9aa0a6">2 минуты нагрузки, следим за нагревом</div></div><button onClick="{{ t_str }}" aria-label="Стресс-тест" style="width:50px;height:30px;border:0;border-radius:999px;padding:3px;background:{{ bg_str }};display:flex;justify-content:{{ jc_str }}"><span style="width:24px;height:24px;border-radius:50%;background:#fff"></span></button></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #22262e"><div style="flex:1"><div style="font-size:16px">Подлинность</div><div style="font-size:12px;color:#9aa0a6">сверка модели с реальным железом</div></div><button onClick="{{ t_fake }}" aria-label="Подлинность" style="width:50px;height:30px;border:0;border-radius:999px;padding:3px;background:{{ bg_fake }};display:flex;justify-content:{{ jc_fake }}"><span style="width:24px;height:24px;border-radius:50%;background:#fff"></span></button></div>
+<button onClick="{{ openMenu }}" style="margin-top:16px;width:100%;min-height:52px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:16px;font-weight:700">Готово</button></div></div></sc-if></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const s=this.state||{};
+const v={ menu: !!s.menu, openMenu: () => this.setState({ menu: !s.menu }) };
+['cam','chg','str','fake'].forEach(k => { const on=!!s[k]; v['on_'+k]=on; v['bg_'+k]=on?'#8ab4f8':'#3c4043'; v['jc_'+k]=on?'flex-end':'flex-start'; v['t_'+k]=() => this.setState({ [k]: !on }); });
+return v;
+}
+}
+</script>
+</body>
+</html>

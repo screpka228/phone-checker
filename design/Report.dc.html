@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Итог: список</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif}
+.row{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid #22262e;font-size:15px}
+.row:last-child{border-bottom:0}
+.pip{width:8px;height:8px;border-radius:50%;flex:none}
+.badge{margin-left:auto;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px}
+.grp{padding:8px 16px 4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7b818a;background:#14171d}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;padding:24px 22px;display:flex;flex-direction:column;gap:12px;background:#0b0d11;color:#e8eaed">
+<div style="margin-top:8px">
+<p style="margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8ab4f8">Итог</p>
+<h1 style="margin:4px 0 0;font-size:26px;font-weight:700">Отчёт</h1>
+<p style="margin:4px 0 0;font-size:12px;color:#9aa0a6">Модель, версия Android и дата патча попадут в файл</p>
+</div>
+<div style="background:#14171d;border:1px solid #22262e;border-radius:16px;overflow:hidden">
+<div class="grp">Основное</div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Экран<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#fdd663"></span>Батарея<span class="badge" style="background:#3a3018;color:#fdd663">износ 18%</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Память<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="grp">Датчики</div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Гироскоп<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Акселерометр<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Датчик приближения<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#3c4043"></span>Датчик света<span class="badge" style="background:#22262e;color:#9aa0a6">пропущено</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Отпечаток<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="grp">Связь</div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Wi-Fi<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Bluetooth<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#3c4043"></span>GPS<span class="badge" style="background:#22262e;color:#9aa0a6">пропущено</span></div>
+<div class="row"><span class="pip" style="background:#81c995"></span>NFC<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="grp">Звук и камеры</div>
+<div class="row"><span class="pip" style="background:#81c995"></span>Звук и микрофон<span class="badge" style="background:#1e3a2a;color:#81c995">норм</span></div>
+<div class="row"><span class="pip" style="background:#f28b82"></span>Камеры<span class="badge" style="background:#3a1d2a;color:#f28b82">дефект</span></div>
+</div>
+<div style="flex:1"></div>
+<button style="min-height:52px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:16px;font-weight:700">Сохранить на SD-карту</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

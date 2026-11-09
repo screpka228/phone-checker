@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Батарея</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif}
+.card{background:#14171d;border:1px solid #22262e;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.kv{display:flex;justify-content:space-between;font-size:15px}
+.k{color:#9aa0a6}
+.cap{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7b818a}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;padding:28px 20px;display:flex;flex-direction:column;gap:14px;background:#0b0d11;color:#e8eaed">
+<div style="margin-top:12px">
+<p style="margin:0;font-size:13px;color:#9aa0a6">Тест 6 из 6 · без SIM</p>
+<h1 style="margin:4px 0 0;font-size:26px;font-weight:700">Связь</h1>
+<p style="margin:6px 0 0;font-size:14px;line-height:1.45;color:#9aa0a6">Модули включаются по очереди, ищем сети и устройства рядом.</p>
+</div>
+<div class="card"><div class="kv" style="align-items:center"><span>Wi-Fi</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">найдено 7 сетей</span></div><div class="kv" style="align-items:center"><span>Bluetooth</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">найдено 3 устройства</span></div><div class="kv" style="align-items:center"><span>GPS</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">спутники: 9</span></div><div class="kv" style="align-items:center"><span>NFC: модуль</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">есть, включается</span></div><div class="kv" style="align-items:center"><span>NFC: чтение</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">опционально</span></div><div class="kv" style="align-items:center"><span>SIM-лоток</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">только наличие</span></div></div><div class="card"><span class="cap">NFC без карты</span><span style="font-size:14px;line-height:1.45;color:#9aa0a6">Проверяем, что модуль есть и включается. Если под рукой второй телефон с NFC, приложите их спинками: приложение увидит его без карты.</span></div>
+<div style="flex:1"></div>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Далее</button>
+<button style="min-height:48px;border:1px solid #2a2e36;border-radius:16px;background:transparent;color:#9aa0a6;font-size:15px">Пропустить</button>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Далее</button>
+<button style="min-height:48px;border:1px solid #2a2e36;border-radius:16px;background:transparent;color:#9aa0a6;font-size:15px">Пропустить</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

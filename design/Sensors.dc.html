@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Батарея</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif}
+.card{background:#14171d;border:1px solid #22262e;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.kv{display:flex;justify-content:space-between;font-size:15px}
+.k{color:#9aa0a6}
+.cap{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7b818a}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;padding:28px 20px;display:flex;flex-direction:column;gap:14px;background:#0b0d11;color:#e8eaed">
+<div style="margin-top:12px">
+<p style="margin:0;font-size:13px;color:#9aa0a6">Тест 5 из 6</p>
+<h1 style="margin:4px 0 0;font-size:26px;font-weight:700">Датчики</h1>
+<p style="margin:6px 0 0;font-size:14px;line-height:1.45;color:#9aa0a6">Список строится по тому, что есть в телефоне. Строки загораются сами, когда датчик откликнулся.</p>
+</div>
+<div class="card" style="gap:8px"><div class="kv" style="align-items:center"><span>Акселерометр</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">работает</span></div><div class="kv" style="align-items:center"><span>Гироскоп</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">работает</span></div><div class="kv" style="align-items:center"><span>Автоповорот</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">работает</span></div><div class="kv" style="align-items:center"><span>Магнитометр (компас)</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#fdd663">калибровка</span></div><div class="kv" style="align-items:center"><span>Барометр</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">1012 гПа</span></div><div class="kv" style="align-items:center"><span>Приближение</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#fdd663">поднесите руку</span></div><div class="kv" style="align-items:center"><span>Освещённость</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#81c995">124 лк</span></div><div class="kv" style="align-items:center"><span>Датчик Холла</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">поднесите магнит</span></div><div class="kv" style="align-items:center"><span>Шагомер</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">нет в телефоне</span></div><div class="kv" style="align-items:center"><span>ИК-порт</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">нет в телефоне</span></div><div class="kv" style="align-items:center"><span>Вибромотор</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">нажмите</span></div><div class="kv" style="align-items:center"><span>Отпечаток</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">приложите палец</span></div><div class="kv" style="align-items:center"><span>Кнопки громк./питания</span><span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:#22262e;color:#9aa0a6">нажмите каждую</span></div></div>
+<div style="flex:1"></div>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Далее</button>
+<button style="min-height:48px;border:1px solid #2a2e36;border-radius:16px;background:transparent;color:#9aa0a6;font-size:15px">Пропустить</button>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Далее</button>
+<button style="min-height:48px;border:1px solid #2a2e36;border-radius:16px;background:transparent;color:#9aa0a6;font-size:15px">Пропустить</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

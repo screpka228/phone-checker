@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Батарея</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,sans-serif}
+.card{background:#14171d;border:1px solid #22262e;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.kv{display:flex;justify-content:space-between;font-size:15px}
+.k{color:#9aa0a6}
+.cap{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7b818a}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;padding:28px 20px;display:flex;flex-direction:column;gap:14px;background:#0b0d11;color:#e8eaed">
+<div style="margin-top:12px">
+<p style="margin:0;font-size:13px;color:#9aa0a6">Тест 3 из 6 · автоматически</p>
+<h1 style="margin:4px 0 0;font-size:26px;font-weight:700">Батарея</h1>
+<p style="margin:6px 0 0;font-size:14px;line-height:1.45;color:#9aa0a6">Данные из системы. Если телефон их не отдаёт, поле пустое.</p>
+</div>
+<div class="card"><span class="cap">Здоровье</span><span style="font-size:44px;font-weight:800;color:#fdd663">82%</span><div style="height:10px;border-radius:999px;background:#22262e"><div style="width:82%;height:10px;border-radius:999px;background:#fdd663"></div></div></div><div class="card"><div class="kv"><span class="k">Заряд</span><span>64%</span></div><div class="kv"><span class="k">Температура</span><span>31 °C</span></div><div class="kv"><span class="k">Напряжение</span><span>3,98 В</span></div><div class="kv"><span class="k">Состояние</span><span>Хорошее</span></div><div class="kv"><span class="k">Циклы</span><span>нет данных</span></div><div class="kv"><span class="k">Зарядка</span><span>по кабелю ✓</span></div></div>
+<div style="flex:1"></div>
+<button style="min-height:56px;border:0;border-radius:16px;background:#8ab4f8;color:#0b0d11;font-size:17px;font-weight:700">Далее</button>
+<button style="min-height:48px;border:1px solid #2a2e36;border-radius:16px;background:transparent;color:#9aa0a6;font-size:15px">Пропустить</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
