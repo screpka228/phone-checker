@@ -21,7 +21,11 @@ import androidx.compose.ui.graphics.toArgb
 import com.phonechecker.data.AppState
 import com.phonechecker.data.CheckId
 import com.phonechecker.data.CheckResult
+import com.phonechecker.checks.AuthCheck
 import com.phonechecker.checks.BatteryCheck
+import com.phonechecker.checks.CameraCheck
+import com.phonechecker.checks.ChargeCheck
+import com.phonechecker.checks.StressCheck
 import com.phonechecker.checks.ConnectCheck
 import com.phonechecker.checks.SensorsCheck
 import com.phonechecker.checks.MemoryCheck
@@ -100,6 +104,10 @@ private fun CheckHost(id: CheckId, state: AppState, done: () -> Unit) {
         CheckId.SENSORS -> SensorsCheck(index, finish, skip)
         CheckId.CONNECT -> ConnectCheck(index, finish, skip)
         CheckId.SYSTEM -> SystemCheck(finish, skip)
+        CheckId.CAMERA -> CameraCheck(finish, skip)
+        CheckId.CHARGE -> ChargeCheck(finish, skip)
+        CheckId.STRESS -> StressCheck(finish, skip)
+        CheckId.AUTH -> AuthCheck(finish, skip)
         else -> Page(bottom = {
             SecondaryButton("Пропустить", onClick = skip)
         }) {

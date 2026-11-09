@@ -115,7 +115,7 @@ private fun result(touch: Status?, colors: Status): CheckResult {
 
 /** Прячет системные панели и не даёт экрану гаснуть, пока показан контент. */
 @Composable
-private fun Immersive(content: @Composable () -> Unit) {
+internal fun Immersive(content: @Composable () -> Unit) {
     val view = LocalView.current
     DisposableEffect(Unit) {
         val window = (view.context as Activity).window

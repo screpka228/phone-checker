@@ -55,4 +55,10 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material3:material3")
+
+    val camerax = "1.4.1"
+    implementation("androidx.camera:camera-camera2:$camerax")
+    implementation("androidx.camera:camera-lifecycle:$camerax")
+    implementation("androidx.camera:camera-video:$camerax")
+    implementation("androidx.camera:camera-view:$camerax")
 }
