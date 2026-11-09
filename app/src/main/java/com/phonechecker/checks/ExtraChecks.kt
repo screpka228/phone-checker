@@ -298,6 +298,8 @@ fun authRows(ctx: Context): List<AuthRow> {
     val mismatch = models.filter { !it.equals(model, true) }
     rows += AuthRow("Модель в разделах", (listOf(model) + mismatch).joinToString(" · "), if (mismatch.isNotEmpty()) "модель отличается в системных разделах" else null)
 
+    portedFrom()?.let { rows += AuthRow("Прошивка", it, "прошивка от другой модели — железо может отличаться от заявленного") }
+
     val soc = socName()
     val oldMtk = Regex("mt65(7|8)\\d", RegexOption.IGNORE_CASE).containsMatchIn(soc)
     rows += AuthRow("Процессор (SoC)", soc.ifEmpty { NO_DATA }, if (oldMtk && Build.VERSION.SDK_INT >= 26) "очень старый чип MediaTek под новой версией Android" else if (oldMtk && flagship) "бюджетный чип у «флагмана»" else null)

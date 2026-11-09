@@ -90,7 +90,7 @@ fun readBattery(ctx: Context, i: Intent?): BatteryInfo {
         src = "по данным контроллера"
     }
     // 2) Оценка: счётчик заряда / текущий % против заводской ёмкости.
-    if (pct == null && design != null && level != null && level >= 15) {
+    if (pct == null && design != null && level != null && level >= 50) {
         val counter = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
         if (counter > 0 && counter != Int.MIN_VALUE) {
             val fullMah = counter / 1000f / (level / 100f)
@@ -177,6 +177,7 @@ fun BatteryCheck(index: String, onResult: (CheckResult) -> Unit, onSkip: () -> U
             T(hp?.let { "$it%" } ?: NO_DATA, if (hp != null) 44.sp else 24.sp, tone.fg, FontWeight.ExtraBold)
             Bar((hp ?: 0) / 100f, tone.fg)
             if (hp != null) T(b.healthSource, 12.sp, C.text3)
+            else if (b.designMah != null && (b.level ?: 0) < 50) T("Для оценки зарядите хотя бы до 50%", 12.sp, C.text3)
         }
         Card {
             KV("Заряд", b.level?.let { "$it%" } ?: NO_DATA)

@@ -32,23 +32,60 @@ private val SU_PATHS = listOf(
     "/su/bin/su", "/data/local/su", "/data/local/bin/su", "/data/local/xbin/su", "/debug_ramdisk/su",
 )
 
+private val CUSTOM_ROMS = listOf(
+    "unica" to "UN1CA", "lineage" to "LineageOS", "crdroid" to "crDroid", "pixelexperience" to "PixelExperience",
+    "evolution" to "Evolution X", "aospa" to "Paranoid Android", "arrow" to "ArrowOS", "havoc" to "Havoc",
+    "pixelos" to "PixelOS", "derp" to "DerpFest", "rising" to "RisingOS", "yaap" to "YAAP", "ponces" to "GSI",
+    "phh" to "GSI (phh)", "cherish" to "CherishOS", "superior" to "SuperiorOS", "ex.firmware" to "мод",
+)
+
+/** Все системные свойства (getprop доступен обычным приложениям). */
+fun allProps(): Map<String, String> = runCatching {
+    val re = Regex("""^\[(.+?)]: \[(.*)]$""")
+    Runtime.getRuntime().exec("getprop").inputStream.bufferedReader().readLines()
+        .mapNotNull { re.find(it)?.destructured?.let { (k, v) -> k to v } }.toMap()
+}.getOrDefault(emptyMap())
+
+/**
+ * Порт прошивки с другой модели (например, One UI от S22 на S8): модель в разных
+ * разделах или в версии загрузчика Samsung не совпадает. null — расхождений нет.
+ */
+fun portedFrom(): String? {
+    val models = listOf("ro.product.model", "ro.product.system.model", "ro.product.vendor.model", "ro.product.odm.model", "ro.product.product.model", "ro.product.system_ext.model")
+        .map(::prop).plus(Build.MODEL).filter { it.isNotBlank() }.map { it.uppercase() }.distinct()
+    if (models.size > 1) return "порт: ${models.joinToString(" / ")}"
+    // У Samsung версия загрузчика начинается с кода модели без «SM-»: G950FXXU…
+    val bl = (Build.BOOTLOADER ?: "").uppercase()
+    val code = Build.MODEL.uppercase().removePrefix("SM-")
+    if (Build.MANUFACTURER.equals("samsung", true) && bl.length > 6 && code.length >= 4 && !bl.startsWith(code.take(4))) {
+        return "загрузчик ${bl.take(5)}… не от ${Build.MODEL}"
+    }
+    return null
+}
+
 fun systemInfo(ctx: Context): List<Pair<String, String>> {
     val pm = ctx.packageManager
 
     val tags = Build.TAGS ?: ""
+    val props = allProps()
     val customSigns = buildList {
         if ("test-keys" in tags || "dev-keys" in tags) add("подпись $tags")
         if (Build.TYPE != "user") add("сборка ${Build.TYPE}")
-        listOf("ro.lineage.version" to "LineageOS", "ro.crdroid.version" to "crDroid", "ro.pixelexperience.version" to "PixelExperience", "ro.modversion" to "мод")
-            .forEach { (k, n) -> if (prop(k).isNotEmpty()) add(n) }
-    }
-    val firmware = if (customSigns.isEmpty()) "стоковая" else "кастомная (${customSigns.joinToString()})"
+        // Свойства, которые оставляют известные кастомные прошивки.
+        CUSTOM_ROMS.forEach { (key, name) -> if (props.keys.any { key in it }) add(name) }
+        if (prop("ro.modversion").isNotEmpty()) add("мод")
+        portedFrom()?.let { add(it) }
+    }.distinct()
+    val custom = customSigns.isNotEmpty()
+    val firmware = if (!custom) "стоковая" else "кастомная (${customSigns.joinToString()})"
 
     val vbs = prop("ro.boot.verifiedbootstate")
     val locked = prop("ro.boot.flash.locked")
     val devState = prop("ro.boot.vbmeta.device_state")
     val bootloader = when {
         devState == "unlocked" || locked == "0" || vbs == "orange" -> "разблокирован"
+        // Кастомная прошивка на заблокированном загрузчике не ставится — значит, статус подменён.
+        custom -> "скорее всего разблокирован (система сообщает «заблокирован»)"
         devState == "locked" || locked == "1" || vbs == "green" -> "заблокирован"
         else -> NO_DATA
     } + if (vbs.isNotEmpty()) " ($vbs)" else ""
