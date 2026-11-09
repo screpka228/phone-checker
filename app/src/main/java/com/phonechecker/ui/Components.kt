@@ -94,8 +94,9 @@ fun Card(modifier: Modifier = Modifier, gap: Int = 10, content: @Composable Colu
 @Composable
 fun KV(k: String, v: String, vColor: Color = C.text) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        T(k, 15.sp, C.text2, modifier = Modifier.weight(1f, fill = false).padding(end = 12.dp))
-        T(v, 15.sp, vColor, align = TextAlign.End)
+        // Ключ не сжимается, длинное значение переносится под себя.
+        Text(k, Modifier.padding(end = 12.dp), color = C.text2, fontSize = 15.sp, softWrap = false)
+        T(v, 15.sp, vColor, modifier = Modifier.weight(1f), align = TextAlign.End)
     }
 }
 
