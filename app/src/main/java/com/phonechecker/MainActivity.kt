@@ -32,6 +32,7 @@ import com.phonechecker.ui.C
 import com.phonechecker.ui.ChecklistScreen
 import com.phonechecker.ui.Header
 import com.phonechecker.ui.Page
+import com.phonechecker.ui.ReportScreen
 import com.phonechecker.ui.PrimaryButton
 import com.phonechecker.ui.SecondaryButton
 
@@ -78,7 +79,7 @@ private fun Root(state: AppState) {
 
     when (val r = route) {
         null -> ChecklistScreen(state, open = { route = it.name }, report = { route = "report" })
-        "report" -> Placeholder("Отчёт", home)
+        "report" -> ReportScreen(state, home)
         else -> {
             val id = CheckId.valueOf(r)
             CheckHost(id, state, done = { next(id) })
