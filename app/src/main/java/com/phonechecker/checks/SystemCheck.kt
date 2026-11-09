@@ -36,7 +36,7 @@ private val CUSTOM_ROMS = listOf(
     "unica" to "UN1CA", "lineage" to "LineageOS", "crdroid" to "crDroid", "pixelexperience" to "PixelExperience",
     "evolution" to "Evolution X", "aospa" to "Paranoid Android", "arrow" to "ArrowOS", "havoc" to "Havoc",
     "pixelos" to "PixelOS", "derp" to "DerpFest", "rising" to "RisingOS", "yaap" to "YAAP", "ponces" to "GSI",
-    "phh" to "GSI (phh)", "cherish" to "CherishOS", "superior" to "SuperiorOS", "ex.firmware" to "мод",
+    "phh" to "GSI (phh)", "cherish" to "CherishOS", "superior" to "SuperiorOS",
 )
 
 /** Все системные свойства (getprop доступен обычным приложениям). */
@@ -72,7 +72,9 @@ fun systemInfo(ctx: Context): List<Pair<String, String>> {
         if ("test-keys" in tags || "dev-keys" in tags) add("подпись $tags")
         if (Build.TYPE != "user") add("сборка ${Build.TYPE}")
         // Свойства, которые оставляют известные кастомные прошивки.
-        CUSTOM_ROMS.forEach { (key, name) -> if (props.keys.any { key in it }) add(name) }
+        // Сравниваем целые сегменты имени: «unica» не должно ловиться в «bap.unicast».
+        val segments = props.keys.flatMap { it.split('.', '_') }.toSet()
+        CUSTOM_ROMS.forEach { (key, name) -> if (key in segments) add(name) }
         if (prop("ro.modversion").isNotEmpty()) add("мод")
         portedFrom()?.let { add(it) }
     }.distinct()
