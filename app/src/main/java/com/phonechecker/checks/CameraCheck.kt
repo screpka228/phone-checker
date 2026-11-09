@@ -83,7 +83,9 @@ import com.phonechecker.ui.SecondaryButton
 import com.phonechecker.ui.T
 import com.phonechecker.ui.Tone
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 import java.io.File
 
 data class Clip(val file: File, val lens: String, val sec: Long, val micPeak: Double)
@@ -162,7 +164,7 @@ private fun RecordView(onClip: (Clip) -> Unit, clipsCount: Int, review: () -> Un
     }
 
     LaunchedEffect(back) {
-        val provider = ProcessCameraProvider.awaitInstance(ctx)
+        val provider = cameraProvider(ctx)
         val selector = if (back) CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
         if (!provider.hasCamera(selector)) { back = !back; return@LaunchedEffect }
         provider.unbindAll()
@@ -276,6 +278,11 @@ private fun RecordView(onClip: (Clip) -> Unit, clipsCount: Int, review: () -> Un
             } else if (!isRec) Pill("Пропустить", Color(0x66000000), Modifier.padding(top = 10.dp).clickable(onClick = onSkip))
         }
     }
+}
+
+private suspend fun cameraProvider(ctx: Context): ProcessCameraProvider = suspendCancellableCoroutine { cont ->
+    val f = ProcessCameraProvider.getInstance(ctx)
+    f.addListener({ cont.resume(f.get()) }, ContextCompat.getMainExecutor(ctx))
 }
 
 private fun zoomLabel(z: Float) = (if (z % 1f == 0f) z.toInt().toString() else fmt(z)) + "×"
